@@ -1,0 +1,35 @@
+package com.cyz.controller;
+
+import com.cyz.domain.Student;
+import com.cyz.service.impl.StudentServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+
+@Controller
+public class StudentController {
+    @Autowired
+    private StudentServiceImpl studentService;
+    @ResponseBody
+    @RequestMapping("/find")
+    public void findStu(){
+        /*pagehelper使用方法是在查询方法前面写 PageHelper.startPage(pagenum,pagesize);，pagenum是指当前第几页，pagesize是指一页显示多少条记录
+        * 查出的结果一般用pageinfo包装，可以调用其中很多方法，例如是否为第一页，最后一页，是否有下一页，上一页
+        * */
+        PageHelper.startPage(2,2);
+        List<Student> findall = studentService.findall();
+        PageInfo pageInfo = new PageInfo(findall);
+        System.out.println(pageInfo.isIsFirstPage());
+        System.out.println(pageInfo.isHasNextPage());
+        System.out.println(pageInfo.isIsLastPage());
+        System.out.println(pageInfo.getPageSize());
+        for (Student student : findall) {
+            System.out.println(student);
+        }
+    }
+}
